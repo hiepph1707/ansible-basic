@@ -1,0 +1,19 @@
+all:
+  hosts:
+    fakehost.local
+  children:
+    linux:
+      children:
+        almalinux:
+          hosts:
+            almalinux01:                    
+              ansible_host: 149.28.139.191
+          vars:
+            ansible_port: 1707
+
+        ubuntu:
+          hosts:
+            ubuntu01:
+              ansible_host: 139.180.187.3
+      vars:
+        ansible_user: ansible
