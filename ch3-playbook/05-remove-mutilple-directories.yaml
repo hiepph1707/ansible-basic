@@ -5,16 +5,13 @@
   become: yes # true = yes / false = no
 
   tasks:
-    - name: create multiple directories
+    - name: remove multiple directories
       file:
         path: "{{ item }}"
-        state: directory
-        owner: root
-        group: root
-        mode: 0775
+        state: absent
       loop:
         - /tmp/a
         - /tmp/b
         - /tmp/c
       
-      when: ansible_os_family == 'Debian'
+      when: ansible_os_family == 'RedHat'

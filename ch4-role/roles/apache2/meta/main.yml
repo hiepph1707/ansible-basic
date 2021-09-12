@@ -1,7 +1,7 @@
 galaxy_info:
-  author: Hung Tran
+  author: Hiep Pham
   description: install and configure apache server on Linux
-  company: Axon
+  company: SGB
 
   license: license (GPL-2.0-or-later, MIT, etc)
 
@@ -17,9 +17,6 @@ galaxy_info:
   # https://galaxy.ansible.com/api/v1/platforms/
   #
   platforms:
-  - name: EL
-    versions:
-    - "7"
   - name: Ubuntu
     versions:
     - "bionic"

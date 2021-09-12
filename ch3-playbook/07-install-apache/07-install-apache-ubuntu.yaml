@@ -1,0 +1,58 @@
+# Playbook for automated apache installation
+---
+- name: The demo playbook
+  hosts: ubuntu
+  become: yes
+
+  vars_files:
+    - vars/default.yml
+  gather_facts: yes
+
+  tasks:
+    - name: Install Apache latest version
+      apt:
+        name: apache2
+        update_cache: yes
+        state: latest
+       
+    - name: Create document root for your domain
+      file:
+        path: "/var/www/{{ http_host }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy index page
+      template:
+        src: "templates/index.html.js"
+        dest: "/var/www/{{ http_host }}/index.html"
+    
+    - name: Set up virtualHost
+      template:
+        src: "templates/apache22.conf.j2"
+        dest: "/etc/apache2/sites-available/{{ http_host }}.conf"
+      notify: Reload Apache
+      
+    - name: Enable new site
+      shell: /usr/sbin/a2ensite {{ http_host }}.conf
+      notify: Reload Apache
+
+    - name: "Allow HTTP port {{ http_port }} on UFW firewall"
+      ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+      loop:
+        - "{{ http_port }}"
+        - "{{ https_port }}"
+
+  handlers:
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
+
+    - name: Restart and enable the service
+      service:
+        name: apache2
+        state: restarted
+        enabled: yes

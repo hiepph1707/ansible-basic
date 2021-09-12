@@ -1,18 +1,37 @@
 ---
 # tasks file for apache2
-- name: Install Apache2 on Ubuntu
-  package:
-    name: "{{ apache_service }}" 
-    state: present
+- name: Install Apache latest version
+  apt:
+    name: apache2
+    update_cache: yes
+    state: latest
 
-- name: Configuring service 
-  service:
-    name: "{{ apache_service }}"
-    state: started
-    enabled: yes
+- name: Create document root for your domain
+  file:
+    path: "/var/www/{{ http_host }}"
+    state: directory
+    mode: '0755'
 
-- name: Copy index test page
+- name: Copy index page
   template:
     src: "templates/index.html.j2"
-    dest: "{{ apache_default_site }}/index.html"
-  notify: Restart apache2
+    dest: "/var/www/{{ http_host }}/index.html"
+
+- name: Set up virtualHost
+  template:
+    src: "templates/apache2.conf.j2"
+    dest: "/etc/apache2/sites-available/{{ http_host }}.conf"
+  notify: Reload Apache
+
+- name: Enable new site
+  shell: /usr/sbin/a2ensite {{ http_host }}.conf
+  notify: Reload Apache
+
+- name: "Allow HTTP port {{ http_port }} on UFW firewall"
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - "{{ http_port }}"
+    - "{{ https_port }}"

@@ -7,4 +7,4 @@
   tasks:
     - name: Ping all hosts
       ping:
-      when: ansible_os_family == 'Debian'
+      when: ansible_os_family == 'RedHat'

@@ -1,4 +1,7 @@
 ---
 # defaults file for apache2
-app_user: student
-apache_service: apache2 # default platform is Ubuntu/Debian
+app_user: "hiepph"
+http_host: "ubuntu-role.hiepsharing.com"
+http_port: "80"
+https_port: "443"
+

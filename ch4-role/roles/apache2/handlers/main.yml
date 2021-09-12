@@ -1,6 +1,13 @@
 ---
 # handlers file for apache2
-- name: Restart apache2
-  service: 
-    name: "{{ apache_service }}"
+- name: Reload Apache
+  service:
+    name: apache2
+    state: reloaded
+
+- name: Restart and enable the service
+  service:
+    name: apache2
     state: restarted
+    enabled: yes
+

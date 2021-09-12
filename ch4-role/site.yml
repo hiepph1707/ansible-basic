@@ -1,5 +1,5 @@
 - name: Setup Apache web server
-  hosts: all
+  hosts: ubuntu
   gather_facts: yes
   become: yes
 
@@ -14,7 +14,7 @@
     
     - name: Check the welcome page
       become: no
-      shell: curl http://{{ ansible_host }}
+      shell: curl http://{{ http_host }}
       register: welcome_page
       delegate_to: localhost
 
